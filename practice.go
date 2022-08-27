@@ -11,7 +11,7 @@ func main() {
 		price:            100,
 	}
 
-	pen := createProduct("23423", "GLV", "Sharikiviy", "It is a test", 12)
+	pen := createProduct("23423", "Sharikiviy", "It is a test", 12)
 	outputResult(book)
 	outputResult(pen)
 
