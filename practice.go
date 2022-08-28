@@ -1,19 +1,18 @@
 package main
 
-import "fmt"
+import (
+	"bufio"
+	"fmt"
+	"os"
+	"strconv"
+	"strings"
+)
 
 func main() {
 
-	var book Product = Product{
-		ID:               "353543",
-		name:             "Name",
-		shortDescription: "This is a test product",
-		price:            100,
-	}
+	createdProduct := getProduct()
 
-	pen := createProduct("23423", "Sharikiviy", "It is a test", 12)
-	outputResult(book)
-	outputResult(pen)
+	createdProduct.outputResult()
 
 }
 
@@ -28,16 +27,15 @@ type Product struct {
 	ID               string
 	name             string
 	shortDescription string
-	price            int
+	price            float64
 }
 
-// 2) Create concrete instances of this data type in two different ways:
-//		- Directly inside of the main function
-//		- Inside of main, by using a "creation helper function"
-//		(use any values for title etc. of your choice)
-//		Output (print) the created data structures in the command line (in the main function)
-func createProduct(ID string, name string, description string, price int) (product Product) {
-	product = Product{
+func (product *Product) outputResult() {
+	fmt.Printf("ID: %v\n Name: %v\n Description: %v\n Price: $%.2f\n", product.ID, product.name, product.shortDescription, product.price)
+}
+
+func createProduct(ID string, name string, description string, price float64) (product *Product) {
+	product = &Product{
 		ID:               ID,
 		name:             name,
 		shortDescription: description,
@@ -46,14 +44,29 @@ func createProduct(ID string, name string, description string, price int) (produ
 	return
 }
 
-// 3) Add a "connected function" that outputs the data + call that function from inside "main"
-func outputResult(product Product) {
-	fmt.Println(product)
+func getProduct() *Product {
+	fmt.Println("PLease enter the product data")
+	fmt.Println("--------------")
+
+	reader := bufio.NewReader(os.Stdin)
+
+	idInput := readUserInput(reader, "Product ID: ")
+	nameInput := readUserInput(reader, "Product name: ")
+	descrition := readUserInput(reader, "Descrition: ")
+	priceInput := readUserInput(reader, "Product price")
+
+	priceValue, _ := strconv.ParseFloat(priceInput, 64)
+
+	product := createProduct(idInput, nameInput, descrition, priceValue)
+	return product
 }
 
-// 4) Change the program to fetch user input values for the different data fields
-//		and create only one concrete instance with that entered data.
-//		Output that instance data (via the connected function) then.
+func readUserInput(reader *bufio.Reader, promptText string) string {
+	fmt.Println(promptText)
+	userInput, _ := reader.ReadString('\n')
+	userInput = strings.Replace(userInput, "\n", "", -1)
+	return userInput
+}
 
 // 5) Bonus: Add a connected "store" function that writes that data into a file
 //		The filename should be the unique id, the function should be called at the
