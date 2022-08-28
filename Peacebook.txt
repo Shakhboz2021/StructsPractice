@@ -1,0 +1,4 @@
+ID: book
+Name: Peace
+Description: A book about peace
+Price: 23

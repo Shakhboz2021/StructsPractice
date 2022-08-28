@@ -13,21 +13,27 @@ func main() {
 	createdProduct := getProduct()
 
 	createdProduct.outputResult()
-
+	createdProduct.store()
 }
 
-// Your Tasks
-// 1) Create a new type / data structure for storing product data (e.g. about a book)
-//		The data structure should contain these fields:
-//		- ID
-//		- Title / Name
-//		- Short description
-//		- price (number without currency, we'll just assume USD)
 type Product struct {
 	ID               string
 	name             string
 	shortDescription string
 	price            float64
+}
+
+func (product *Product) store() {
+	file, _ := os.Create(product.name + product.ID + ".txt")
+
+	content := fmt.Sprintf("ID: %v\nName: %v\nDescription: %v\nPrice: %v\n",
+		product.ID,
+		product.name,
+		product.shortDescription,
+		product.price)
+
+	file.WriteString(content)
+	file.Close()
 }
 
 func (product *Product) outputResult() {
